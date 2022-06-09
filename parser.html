@@ -1,0 +1,56 @@
+{% extends "primer3/base.html" %} 
+ {% block content %}
+ <title>PrimerDesigner&trade;解析genbank文页面</title>
+<style>
+table{table-layout:fixed;}
+td{word-break:break-all;word-wrap:break-word;overflow:hidden;text-align:left;}
+</style>
+<div class="panel panel-info" style="margin-top:20px;height:auto;">
+<div class="panel-heading">
+        <b>开始探针设计</b>
+</div>
+<table class="table" > 
+  <caption><center><h3><b>PrimerDesigner&trade;解析genbank文件结果内容</b></h3></center></caption>
+  <thead>
+    <tr>
+      <th width="15%" text-align="center">项目</th>
+      <th width="35%" text-align="center">数据</th>
+      <th width="15%" text-align="center">项目</th>
+      <th width="35%" text-align="center">数据</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr class="active">
+      <td width="15%"><b>Description：</b></td>
+      <td width="35%">{{description}}</td>
+      <td width="15%"><b>GenBank&FASTA：</b></td>
+      <td width="35%">{{filetype}}</td></tr>
+      <tr class="warning">
+      <td width="15%"><b>Accessid：</b></td>
+      <td width="35%" >{{accessid}}</td>
+      <td width="15%"><b>Name：</b></td>
+      <td width="35%">{{name}}</td></tr>
+      <tr class="success">
+      <td width="15%"><b>Source：</b></td>
+      <td width="35%" >{{source}}</td>
+      <td width="15%"><b>Organism：</b></td>
+      <td width="35%">{{organism}}</td></tr>
+      <tr class="danger">
+      <td width="15%"><b>Taxonomy：</b></td>
+      <td width="35%" >{{taxonomy}}</td>
+      <td width="15%"><b>Topology：</b></td>
+      <td width="35%">{{topology}}</td></tr>
+      <tr class="active">
+      <td colspan="4"><u><i>
+      <form name="form1" method="post" action="http://{{ local }}/basemodify/" role="form" >{% csrf_token %}
+      <textarea name="seq" style="display:none;">{{ sequence }}</textarea>
+      <a href="javascript:document.form1.submit();" title="序列信息（5‘-3’）">{{ sequence }}</a>
+      </form>
+      </i></u> </td>
+      </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- /#mainWrap -->
+{% endblock %}

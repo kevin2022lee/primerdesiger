@@ -1,0 +1,180 @@
+{% extends "primer3/base.html" %} 
+ {% block content %}
+ <title>PrimerDesigner&trade;序列预览并设定相应参数数值</title>
+ 
+<style>
+div{table-layout:fixed;}
+div{word-break:break-all;word-wrap:break-word;overflow:hidden;text-align:left;}
+h5{font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;}
+</style>
+<script src='http://www.kunkundashen.cn/site_medias/js/textareastyle.js'></script>
+<script>
+//调用
+$(function () {
+    $("#textarea").txtaAutoHeight();
+});
+</script>
+
+<form action="http://{{local}}/seqinput/" method="POST" role="form">{% csrf_token %}
+<div class="list-group">
+ <a href="#" class="list-group-item default">
+ <h5 class="list-group-item-heading">
+ PrimerDesigner&trade;待设计序列sybol
+ </h5></a>
+<div class="well well-sm">
+{{description}}
+</div></div>
+<div class="list-group">
+ <a href="#" class="list-group-item default">
+ <h5 class="list-group-item-heading">
+  PrimerDesigner&trade;待设计序列全部基因序列(简并碱基请手动替换)
+ </h5>
+ </a>
+<div class="well well-lg" style="padding:0px;" >
+ <table class="table">
+  <caption>简并碱基一览表</caption>
+  <thead>
+    <tr>
+      <th>碱基名称</th>
+      <th>碱基序列</th>
+      <th>碱基名称</th>
+      <th>碱基序列</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>R</td>
+       <td>A/G</td>
+       <td>Y</td>
+        <td>C/T</td>
+    </tr>
+    <tr>
+      <td>M</td>
+          <td>A/C</td>
+      <td>K</td>
+      <td>G/T</td>
+    </tr>
+     <tr>
+     <td>S</td>
+      <td>G/C</td>
+      <td>W</td>           
+      <td>A/T</td>
+    </tr>
+    <tr>
+    <td>H</td>
+    <td>A/T/C</td>
+      <td>B</td>
+      <td>G/T/C</td>
+    </tr>
+    <tr>
+          <td>V</td>
+      <td>G/A/C</td>
+      <td>D</td>
+      <td>G/A/T</td>
+    </tr>
+    <tr>
+          <td>N</td>
+        <td>A/G/T/C</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+<div style="background:url(http://www.kunkundashen.cn/static/imgs/seqbg.gif) no-repeat; padding-left:30px;padding-right:5px;padding-top:25px;">
+{% for s in sequence %}
+<input type="text" name="seqtxt" style="margin-top:2px;margin-bottom:2px;border:none; width:32px;background-color:transparent;" title="{{forloop.counter}}" placeholder="{{forloop.counter}}" value="{{s}}">
+{%endfor%}
+<br/><br/>
+</div>
+</div>
+<div class="well well-lg">
+<table class="table">
+  <caption><center><b>PrimerDesigner&trade;引物设计参数（可选）,非必须建议默认<b></center></caption>
+  <thead>
+    <tr>
+      <th>参数名称</th>
+      <th>设定数值</th>
+      <th>参数名称</th>
+      <th>设定数值</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PRIMER_OPT_SIZE:</td>
+       <td><input type="text" name="PRIMER_OPT_SIZE" value="20"/></td>
+       <td>PRIMER_PICK_INTERNAL_OLIGO:</td>
+        <td><!--<input type="text" name="PRIMER_PICK_INTERNAL_OLIGO" value="1"/>-->
+         <label class="radio-inline">
+        <input type="radio" name="PRIMER_PICK_INTERNAL_OLIGO" value="1" checked> 1
+         </label>
+          <label class="radio-inline">
+        <input type="radio" name="PRIMER_PICK_INTERNAL_OLIGO" value="0"> 0
+        </label>
+        </td>
+    </tr>
+        <tr>
+      <td>PRIMER_INTERNAL_MAX_SELF_END:</td>
+       <td><input type="text" name="PRIMER_INTERNAL_MAX_SELF_END" value="8"/></td>
+       <td>PRIMER_MIN_SIZE:</td>
+        <td><input type="text" name="PRIMER_MIN_SIZE" value="18"/></td>
+    </tr>
+     <tr>
+      <td>PRIMER_MAX_SIZE:</td>
+       <td><input type="text" name="PRIMER_MAX_SIZE" value="25"/></td>
+       <td>PRIMER_OPT_TM:</td>
+        <td><input type="text" name="PRIMER_OPT_TM" value="60"/></td>
+    </tr>
+    <tr>
+      <td>PRIMER_MIN_TM:</td>
+       <td><input type="text" name="PRIMER_MIN_TM" value="57.0"/></td>
+       <td>PRIMER_MAX_TM:</td>
+        <td><input type="text" name="PRIMER_MAX_TM" value="63.0"/></td>
+    </tr>
+    <tr>
+      <td>PRIMER_MIN_GC:</td>
+       <td><input type="text" name="PRIMER_MIN_GC" value="20.0"/></td>
+       <td>PRIMER_MAX_GC:</td>
+        <td><input type="text" name="PRIMER_MAX_GC" value="80.0"/></td>
+    </tr>
+     <tr>
+      <td>PRIMER_MAX_POLY_X:</td>
+       <td><input type="text" name="PRIMER_MAX_POLY_X" value="100"/></td>
+       <td>PRIMER_INTERNAL_MAX_POLY_X:</td>
+        <td><input type="text" name="PRIMER_INTERNAL_MAX_POLY_X" value="100"/></td>
+    </tr><tr>
+      <td>PRIMER_SALT_MONOVALENT:</td>
+       <td><input type="text" name="PRIMER_SALT_MONOVALENT" value="50.0"/></td>
+       <td>PRIMER_DNA_CONC:</td>
+        <td><input type="text" name="PRIMER_DNA_CONC" value="50.0"/></td>
+    </tr><tr>
+      <td>PRIMER_MAX_NS_ACCEPTED:</td>
+       <td><input type="text" name="PRIMER_MAX_NS_ACCEPTED" value="0"/></td>
+       <td>PRIMER_MAX_SELF_ANY:</td>
+        <td><input type="text" name="PRIMER_MAX_SELF_ANY" value="12"/></td>
+    </tr><tr>
+      <td>PRIMER_MAX_SELF_END:</td>
+       <td><input type="text" name="PRIMER_MAX_SELF_END" value="8"/></td>
+       <td>PRIMER_PAIR_MAX_COMPL_ANY:</td>
+        <td><input type="text" name="PRIMER_PAIR_MAX_COMPL_ANY" value="12"/></td>
+    </tr>
+    <tr>
+      <td>PRIMER_PAIR_MAX_COMPL_END:</td>
+       <td><input type="text" name="PRIMER_PAIR_MAX_COMPL_END" value="8"/></td>
+       <td>PRIMER_PRODUCT_SIZE_RANGE:</td>
+        <td>
+        <select name="PRIMER_PRODUCT_SIZE_RANGE">
+        <option selected>[75,200]</option>
+        <option>[75,125]</option>
+        <option>[125,175]</option>
+        <option>[150,200]</option>
+    </select>  
+        </td>
+    </tr>
+    </tbody>
+    </table>
+</div>
+<button type="submit" class="btn btn-primary" style="text-shadow: black 5px 3px 3px;"><span class="glyphicon glyphicon glyphicon-step-forward"></span>开始设计</button>
+</form>
+</div>
+<!-- /#mainWrap -->
+{% endblock %}

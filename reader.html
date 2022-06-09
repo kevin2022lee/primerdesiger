@@ -1,0 +1,41 @@
+{% extends "primer3/base.html" %} 
+ {% block content %}
+ <title>Primer Designer&trade;读取序列解析页面</title>
+<style>
+table{table-layout:fixed;}
+td{word-break:break-all;word-wrap:break-word;overflow:hidden;text-align:left;}
+</style>
+<div class="panel panel-info" style="margin-top:20px;height:auto;">
+<div class="panel-heading">
+        <b>Primer Designer&trade;开始探针设计</b>
+</div>
+<table class="table" > 
+  <caption><center><h3><b>Primer Designer&trade;读取序列结果内容</b></h3></center></caption>
+  <thead>
+    <tr>
+      <th width="15%" text-align="center">项目</th>
+      <th width="35%" text-align="center">数据</th>
+      <th width="15%" text-align="center">项目</th>
+      <th width="35%" text-align="center">数据</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr class="active">
+      <td width="15%"><b>Description：</b></td>
+      <td width="35%">{{gene_sybol}}</td>
+      <td width="15%"><b>GenBank&FASTA：</b></td>
+      <td width="35%">Raw Input</td></tr>
+      <tr class="active">
+      <td colspan="4"><u><i>
+      <form name="form1" method="post" action="http://{{ local }}/basemodify/" role="form" >{% csrf_token %}
+      <textarea name="seq" style="display:none;">{{ gene_sequence }}</textarea>
+      <a href="javascript:document.form1.submit();" title="序列信息（5‘-3’）">{{ gene_sequence }}</a>
+      </form>
+      </i></u> </td>
+      </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- /#mainWrap -->
+{% endblock %}

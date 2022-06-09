@@ -1,0 +1,238 @@
+{% extends "primer3/base.html" %} 
+ {% block content %}
+ <title>PrimerDesigner&trade;可用的引物列表以及引物的参数信息</title>
+<script src="http://www.kunkundashen.cn/site_medias/js/jquery.base64.js"></script>
+<script src="http://www.kunkundashen.cn/site_medias/js/tableExport.js"></script>
+<script type="text/javascript">
+        $(function () {
+            var pretime = $('#pretime').html();
+            //farward引物样式
+            $('.fmatch').each(function () {
+                $(this).click(function(){
+                    $('#pretime').html(pretime);
+                    var matchText = $(this).text();
+                    //alert(matchText);
+                    var regExp = new RegExp(matchText, 'g');
+                    var html = $('#pretime').html();
+                    var newHtml = html.replace(regExp, '<span class="fhighlight">' + matchText + '</span>');
+                    $('#pretime').html(newHtml);
+                    flag = 1;
+
+                    if (flag) {
+                        if ($(".fhighlight").size() > 1) {
+                            var _top = $(".fhighlight").eq(0).offset().top;
+                            $("html,body").animate({
+                                "scrollTop": _top
+                                }, 500)
+                            }
+                        }
+                    
+                    })
+            });
+            //internal 引物样式
+            
+            $('.imatch').each(function () {
+                $(this).click(function(){
+                    $('#pretime').html(pretime);
+                    var matchText = $(this).text();
+                    //alert(matchText);
+                    var regExp = new RegExp(matchText, 'g');
+                    var html = $('#pretime').html();
+                    var newHtml = html.replace(regExp, '<span class="ihighlight">' + matchText + '</span>');
+                    $('#pretime').html(newHtml);
+                    flag = 1;
+
+                    if (flag) {
+                        if ($(".ihighlight").size() > 1) {
+                            var _top = $(".ihighlight").eq(0).offset().top;
+                            $("html,body").animate({
+                                "scrollTop": _top
+                                }, 500)
+                            }
+                        }
+                    
+                    })
+            });
+            
+            //reverse 引物样式
+            $('.rmatch').each(function () {
+                $(this).click(function(){
+                    $('#pretime').html(pretime);
+                    var matchText = $(this).text();
+                    //alert(matchText);
+                    var regExp = new RegExp(matchText, 'g');
+                    var html = $('#pretime').html();
+                    var newHtml = html.replace(regExp, '<span class="rhighlight">' + matchText + '</span>');
+                    $('#pretime').html(newHtml);
+                    flag = 1;
+
+                    if (flag) {
+                        if ($(".rhighlight").size() > 1) {
+                            var _top = $(".rhighlight").eq(0).offset().top;
+                            $("html,body").animate({
+                                "scrollTop": _top
+                                }, 500)
+                            }
+                        }
+                    
+                    })
+            });
+            
+        });
+    </script>
+ 
+ 
+
+
+ 
+<style type="text/css">
+        .fhighlight { background: url("../site_medias/imgs/forward_bg_r.png") repeat-x; color: black; font-size:20px; }
+        .rhighlight { background: url("../site_medias/imgs/reverse_bg_r.png") repeat-x; color: black; font-size:20px;}
+        .ihighlight { background: url("../site_medias/imgs/internal_bg_r.png") repeat-x;  color: black; font-size:20px;}
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">
+     <h3 class="panel-title">PrimerDesigner&trade;软件设计结果</h3>
+    </div>
+    <div class="panel panel-default">
+<div class="well well-lg">
+<table class="table-bordered" id="tb_pl_p" >
+  <caption><center><b>PrimerDesigner&trade;软件PCR反应的引物设计方案详细参数</b></center></caption>
+  <thead>
+    <tr>
+      <th style="width:400px;"><center>参数</center></th>
+      <th style="width:80px;"><center>设计方案1</center></th>
+      <th style="width:80px;"><center>设计方案2</center></th>
+      <th style="width:80px;"><center>设计方案3</center></th>
+      <th style="width:80px;"><center>设计方案4</center></th>
+      <th style="width:80px;"><center>设计方案5</center></th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for key,value in primer3_primary_result.items %}
+   
+    <tr>
+      <td style="word-break:break-all; word-wrap:break-word; white-space:inherit" ><center>{{key}}</center></td>
+      {% for v in value %}
+      <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">
+      <center>{{v}}</center>
+      </td>
+      {% endfor %}
+    </tr>
+ {% endfor %}   
+  </tbody>
+</table>
+</div>
+<!--
+<button type="button" onclick="$('#tb_pl_p').tableExport({ type: 'excel', separator: ';', escape: 'false' });"  class="btn btn-info" style="text-shadow: black 5px 3px 3px;"><span class="glyphicon glyphicon-step-forward"></span>导出引物参数</button>
+-->
+<hr/>
+
+<div class="well well-lg">
+<div class="table-responsive">
+  <table class="table" id="tb_pl_m">
+    <caption><b><center>PrimerDesigner&trade;designed Primers Sequence Lists</b></center></caption>
+    <thead>
+      <tr>
+        <th width="25%"> Primer informations</th>
+        <th width="15%"> Option1</th>
+        <th width="15%"> Option2</th>
+        <th width="15%"> Option3</th>
+        <th width="15%"> Option4</th>
+        <th width="15%"> Option5</th>
+        </tr>
+    </thead>
+    <tr>
+    <td colspan="1" style="word-break:break-all; word-wrap:break-word; white-space:inherit">
+    <b>Target DNA informations</b></td>
+    <td colspan="5" style="word-break:break-all; word-wrap:break-word; white-space:inherit">
+    >{{seqid}}c{{se}},{{description}}|target DNA<br/>
+    <div id="pretime">
+    {{seqtxt}}
+    </div>
+    </td>
+    </tr>
+    <tbody>
+      <tr class="active">
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><b>Forward Primers</b></td>
+    {% for k,v in dict_left_seqs.items %}
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="fmatch">{{v.0}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="fmatch">{{v.1}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="fmatch">{{v.2}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="fmatch">{{v.3}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="fmatch">{{v.4}}</a></td></tr>
+        {% endfor %}
+      <tr class="success">
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><b>Internal Primers</b></td>
+        {% for k,v in dict_intnl_seqs.items %}
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="imatch">{{v.0}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="imatch">{{v.1}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="imatch">{{v.2}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="imatch">{{v.3}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="imatch">{{v.4}}</a></td></tr>
+        {% endfor %}
+      <tr class="warning">
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><b>Reverse Primers</b> </td>
+        {% for k,v in dict_right_seqs.items %}
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.0}}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.1}}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.2}}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.3}}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.4}}</td></tr>
+        {% endfor %}
+        
+        <tr class="success">
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><b>Reverse Primers Complement</b> </td>
+        {% for k,v in dict_right_RC_seqs.items %}
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="rmatch">{{v.0}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="rmatch">{{v.1}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="rmatch">{{v.2}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="rmatch">{{v.3}}</a></td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><a title="点击查找引物位置"  style="cursor:pointer" class="rmatch">{{v.4}}</a></td></tr>
+        {% endfor %}
+
+         <tr class="danger">
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><b>Product Size(bp)</b> </td>
+        {% for k,v in dict_prdct_sizes.items %}
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.0}}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.1}}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.2}}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.3}}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.4}}</td>
+        {% endfor %}
+        </tr>
+          <tr class="active">
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><b>Primer pair Compile</b> </td>
+        {% for k,v in dict_compl_anyths.items %}
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.0|floatformat:2 }}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.1|floatformat:2 }}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.2|floatformat:2 }}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.3|floatformat:2 }}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.4|floatformat:2 }}</td>
+        {% endfor %}
+        </tr>
+        <tr class="success">
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit"><b>Primer pair Penalty</b> </td>
+        {% for k,v in dict_pair_penaltys.items %}
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.0|floatformat:2 }}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.1|floatformat:2 }}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.2|floatformat:2 }}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.3|floatformat:2 }}</td>
+        <td style="word-break:break-all; word-wrap:break-word; white-space:inherit">{{v.4|floatformat:2 }}</td>
+        {% endfor %}
+        </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+</div>
+
+ 
+<button type="button" onclick="$('#tb_pl_m').tableExport({ type: 'excel', separator: ';', escape: 'false' });"  class="btn btn-primary" style="text-shadow: black 5px 3px 3px;"><span class="glyphicon glyphicon-step-forward"></span>生成引物表</button>
+
+            </div>
+        </div>
+
+</div>
+ <!-- /#mainWrap -->
+{% endblock %}

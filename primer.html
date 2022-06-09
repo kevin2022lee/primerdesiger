@@ -1,0 +1,181 @@
+
+{% extends "primer3/base.html" %} 
+ {% block content %}
+<script type="text/javascript">
+$(document).ready(function(){
+  maxvalue=200;
+  $("#seqid").blur(function(){
+      var id=$("#seqid").val();
+      if(id.length==0)
+      {
+          $("#btnentrez").attr("disabled", true); 
+          $("#enderror").html("Accession id输入不能为空！");
+          $("#seqid").focus();
+      }else{
+          $("#btnentrez").removeAttr("disabled"); 
+          $("#enderror").html("");
+          htmlobj=$.ajax({url:"/checkAccessionLen/"+id,async:false});
+          maxvalue=htmlobj.responseText
+          <!--$("#end").attr("value",htmlobj.responseText); -->
+          $("#enderror").html("提示：该DNA全长度"+htmlobj.responseText+"bp");
+      }
+  });
+  $("#end").blur(function(){
+      var endvalue = Number($("#end").val());
+      if(endvalue > maxvalue)
+      {
+          $("#btnentrez").attr("disabled", true); 
+          $("#enderror").html("超过序列最大长度范围！");
+          $("#end").focus();
+      }else
+      {
+          $("#btnentrez").removeAttr("disabled"); 
+          $("#enderror").html("");
+      }
+  });
+  $("#start").blur(function(){
+      var startvalue = Number($("#start").val());
+      <!--var endvalue = Number($("#end").val());-->
+      if(startvalue > maxvalue)
+      {
+          $("#btnentrez").attr("disabled", true); 
+          $("#enderror").html("起始点不能大于结束点！");
+          $("#start").focus();
+      }else
+      {
+          $("#btnentrez").removeAttr("disabled"); 
+          $("#enderror").html("");
+      }
+  });
+  $("#btnentrez").focus(function(){
+      var startvalue = Number($("#start").val());
+      var endvalue = Number($("#end").val());
+      if(endvalue-startvalue < 200)
+      {
+          $("#btnentrez").attr("disabled", true); 
+          $("#enderror").html("结束点输入不合法或设计模板小于200bp！");
+       }else
+      {
+          $("#btnentrez").removeAttr("disabled"); 
+          $("#enderror").html("");
+        }
+});
+  $("#sybol").blur(function(){
+      var sybol=$("#sybol").val();
+      if(sybol.length==0)
+      {
+          $("#btnread").attr("disabled", true); 
+          $("#inputerror").html("sybol输入不能为空！");
+          $("#sybol").focus();
+      }else{
+          $("#btnread").removeAttr("disabled"); 
+          $("#inputerror").html("");
+      }
+  });
+    $("#sequence").blur(function(){
+      var seq=$("#sequence").val();
+      var isletter = /^[a-zA-Z]+$/.test(seq);
+      if(isletter)
+      {
+          $("#btnread").removeAttr("disabled"); 
+          $("#inputerror").html("");
+      }else{
+          $("#btnread").attr("disabled", true); 
+          $("#inputerror").html("Sequence输入不能为空且应为碱基（AGTC）序列！");
+          $("#squence").focus(); 
+      }
+  });
+    $("#btnread").click(function(event){
+        //阻止提交
+        var seq=$("#sequence").val();
+        var sybol=$("#sybol").val();
+        if(seq=="" || sybol=="")
+      {
+          $("#btnread").attr("disabled", true); 
+          $("#inputerror").html("sybol&&Sequence输入不能为空！");
+          event.preventDefault();
+      }else{
+          $("#btnread").removeAttr("disabled"); 
+          $("#inputerror").html("");
+      }
+  });
+});
+</script>
+ <title>PrimerDesigner&trade;PrimerDesigner引物探针设计起始页面</title>
+
+<div class="panel panel-default">
+<div class="panel-heading">
+<h3 class="panel-title">
+        方法1：PrimerDesigner&trade;读取Entrez远程<em>Genbank</em>或者<em>Fasta</em>文件开始探针设计[适用于大于0.4k序列文件]
+</h3>
+</div>
+    
+<div class="panel body" style="height:100px; padding-top:50px;">
+<form action="http://{{ local }}/seqview/" method="POST" role="form" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
+<div class="col-sm-2">
+<input class="form-control" id="seqid" type="text" name="seqid" placeholder="输入NCBI的Accession ID">
+</div>
+<div class="col-sm-1">
+<label for="start" >起始点</label>
+</div>
+<div class="col-sm-2">
+<input class="form-control" type="text" id="start" name="start"  placeholder="默认从1开始">
+</div>
+<div class="col-sm-1">
+<label for="start" >截止点</label>
+</div>
+<div class="col-sm-2">
+<input class="form-control" id="end" type="text" name="end"  placeholder="默认最大长度值">
+</div>
+<div class="col-sm-2">
+<font color="red">
+<label id="enderror" for="end" ></label>
+</font>
+
+</div>
+
+<div class="col-sm-2">
+<button class="btn-primary btn" id="btnentrez" type="submit">读取文件</button>
+</div>    
+</form>
+
+</div>
+<div class="panel-footer">
+<span class="label label-default">Tips:TAB键切换到下一个选项输入框！</span></div>
+</div>
+
+
+<div class="panel panel-default">
+<div class="panel-heading">
+        <h3 class="panel-title">
+            方法2：PrimerDesigner&trade;读取本地<em>Genbank</em>或者<em>Fasta</em>文件开始探针设计[请将序列粘贴于此处]
+        </h3>
+</div>
+
+
+    <div class="panel-body">
+<form action="http://{{ local }}/seqread/" method="POST" enctype="multipart/form-data">{% csrf_token %}
+   <div class="form-group">
+    <label for="name">输入序列的基因名称:</label>
+    <input type="text" id="sybol" name="gene_sybol" class="form-control" placeholder="文本输入" >
+  </div>
+<div class="form-group">
+    <label for="name">粘贴基因的序列信息5’~3’：</label>
+    <textarea id="sequence" name="gene_sequence" class="form-control" rows="3" placeholder="粘贴序列" ></textarea>
+  </div>
+<font color="red">
+<label id="inputerror" for="gene_sequence" ></label>
+</font><br/>
+  <button class="btn-primary btn" id="btnread" type="submit">读取序列</button>
+  </form>
+</div>
+<div class="panel-footer">
+<span class="label label-default">Tips:TAB键切换到下一个选项输入框！</span></div>
+</div>
+
+
+</div>
+
+<!-- /#mainWrap -->
+</div>
+ {% endblock %}
