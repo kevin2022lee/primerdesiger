@@ -11,3 +11,7 @@ then url route file:
 
 
 then the static files
+
+Demo url:
+
+http://www.kunkundashen.cn/primer/
