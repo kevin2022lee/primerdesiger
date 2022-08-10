@@ -1,2 +1,13 @@
-# Designing-And-Developing-for-GIS
-A professional required course for the major of geographic information science. The course content is mainly for the development of WebGIS. The reference book is the development guide for ArcGIS API for JavaScript.
+#python #primer3 #django 
+
+This is a django project base on primer3-py
+
+the primerviews is the control code for this project
+
+then the templates file:
+
+
+then url route file:
+
+
+then the static files
